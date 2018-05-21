@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record model="ir.module.category" id="financiera_comercios_solicitudes">
+      <field name="name">Financiera - Solicitudes en comercios</field>
+      <field name="description">Nivel de acceso</field>
+      <field name="sequence">6</field>
+    </record>
+
+    <record id="manager" model="res.groups">
+     <field name="name">Administrador</field>
+     <field name="category_id" ref="financiera_comercios_solicitudes"/>
+    </record>
+
+    <record id="user" model="res.groups">
+     <field name="name">Usuario</field>
+     <field name="category_id" ref="financiera_comercios_solicitudes"/>
+    </record>
+
+    <record id="process_prestamo" model="res.groups">
+     <field name="name">Procesar prestamo</field>
+     <field name="category_id" ref="financiera_comercios_solicitudes"/>
+    </record>
+
+</data>
+</openerp>
