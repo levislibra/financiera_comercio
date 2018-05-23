@@ -26,6 +26,9 @@
         'security/user_groups.xml',
         'security/ir.model.access.csv',
         'views/views.xml',
+        'data/ir_cron.xml',
+        'views/reports.xml',
+        'financiera_comercio_report.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

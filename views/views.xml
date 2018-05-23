@@ -44,9 +44,9 @@
           <button name="processing" class="oe_highlight" states="send" string="Procesar" type="object" groups="financiera_comercio.process_prestamo" />
           <button name="open" class="oe_highlight" states="processing" string="Validar Solicitud" type="object" groups="financiera_comercio.process_prestamo" />
           <button name="confirm" class="oe_highlight" states="open" string="Confirmar" type="object"/>
-          <button name="draft" states="send" string="A borrador" type="object"/>
+          <button name="draft" string="A borrador" type="object"/>
           <button name="cancel" states="send,processing,open" string="Cancelar Solicitud" type="object"/>
-          <field name="state" widget="statusbar"/>
+          <field name="state" readonly="0" editable="1" widget="statusbar"/>
         </header>
         <form>
           <sheet>
@@ -61,16 +61,23 @@
             <group>
               <group>
                 <field name="partner_id" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
+                <field name="amount" widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
+                <field name="prestamo_id" attrs="{'readonly': True}"/>
+                <field name="default_iva"/>
+                <field name="vat_tax_id"/>
               </group>
               <group>
+                <field name="current_user_id" invisible="1"/>
+                <field name="is_change_asigned" invisible="1"/>
                 <field name="comercio_id" attrs="{'readonly': True, 'required': False}"/>
+                <field name="asigned_id" attrs="{'readonly': [('is_change_asigned', '!=', True)], 'required': False}"/>
               </group>
             </group>
             <notebook>
               <page string="Informacion General">
                 <group>
                   <group>
-                    <field name="amount" widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
+                    
                   </group>
                   <group>
                     
@@ -79,8 +86,37 @@
               </page>
               <page string="Planes">
                 <group>
-                  <field name="amount" widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
+                  <button name="wizard_seleccionar_plan" class="oe_highlight" string="Seleccionar plan" type="object" />
                 </group>
+                <field name="plan_ids" readonly="1">
+                  <tree>
+                    <field name="nombre"/>
+                    <field name="cuotas"/>
+                    <field name="forma_de_pago"/>
+                    <field name="total"/>
+                    <field name="state"/>
+                  </tree>
+                </field>
+              </page>
+              <page string="Cuotas">
+                <field name="cuota_ids">
+                    <tree string="Cuotas" create="false" edit="false" delete="false">
+                        <field name="numero_cuota" editable="0"/>
+                        <field name="fecha_vencimiento" editable="1"/>
+                        <field name="saldo_capital"/>
+                        <field name="capital" sum="Total"/>
+                        <field name="interes" sum="Total"/>
+                        <field name="cuota_pura" sum="Total"/>
+                        <field name="punitorios" invisible="0"/>
+                        <field name="otros_gastos" sum="Total"/>
+                        <field name="iva" sum="Total"/>
+                        <field name="cobrado" sum="Total"/>
+                        <field name="total" sum="Total"/>
+                        <field name="saldo" sum="Total"/>
+                        <field name="ultima_fecha_cobro"/>
+                        <field name="state"/>
+                    </tree>
+                </field>
               </page>
             </notebook>
             <field name="note"/>

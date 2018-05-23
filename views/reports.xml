@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Custom report-->
+<openerp>
+<data>
+
+    <template id="detalle_prestamo">
+         <t t-call="report.external_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="page" style="font-size:12px;">
+                    <strong>Fecha: </strong><span t-field="o.prestamo_id.fecha"/><br/>
+                    <strong>Cliente: </strong><span t-field="o.prestamo_id.cliente_id"/><br/>
+                    <strong>Prestamo: </strong><span t-field="o.prestamo_id.name"/><br/>
+                    <strong>Monto a financiar: </strong>$<span t-field="o.prestamo_id.monto_otorgado"/><br/>
+                    <strong>Plan: </strong><span t-field="o.prestamo_id.plan_id"/><br/>
+                    <strong>Estado: </strong><span t-field="o.prestamo_id.state"/><br/>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th style="width:15%;">Numero de cuota</th>
+                                <th style="width:15%;">Fecha</th>
+                                <th style="width:15%;">Saldo Capital</th>
+                                <th style="width:15%;">Capital</th>
+                                <th style="width:15%;">Interes</th>
+                                <th style="width:15%;">Cuota pura</th>
+                                <th style="width:15%;">IVA</th>
+                                <th style="width:15%;">Monto cuota</th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                            <tr t-foreach="o.prestamo_id.cuota_ids" t-as="l">
+                                <td style="width:15%;"><span t-field="l.numero_cuota"/></td>
+                                <td style="width:15%;"><span t-field="l.fecha_vencimiento"/></td>
+                                <td style="width:15%;">$<span t-field="l.saldo_capital"/></td>
+                                <td style="width:15%;">$<span t-field="l.capital"/></td>
+                                <td style="width:15%;">$<span t-field="l.interes"/></td>
+                                <td style="width:15%;">$<span t-field="l.cuota_pura"/></td>
+                                <td style="width:15%;">$<span t-field="l.iva"/></td>
+                                <td style="width:15%;">$<span t-field="l.total"/></td>
+                            </tr>
+                            <tr>
+                                <td style="width:15%;"></td>
+                                <td style="width:15%;"></td>
+                                <td style="width:15%;"></td>
+                                <td style="width:15%;">$<t t-esc="'{:0,.2f}'.format(sum(l.capital for l in o.prestamo_id.cuota_ids))"/></td>
+                                <td style="width:15%;"></td>
+                                <td style="width:15%;"></td>
+                                <td style="width:15%;"></td>
+                                <td style="width:15%;"></td>
+                                <!-- <td style="width:15%;">$<t t-esc="'{:0,.2f}'.format(sum(l.amount for l in o.all_receivable_debt_ids))"/></td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+ 
+</data>
+</openerp>
