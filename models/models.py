@@ -163,6 +163,7 @@ class FinancieraSolicitud(models.Model):
 	@api.one
 	def confirm(self):
 		self.state = 'confirm'
+		self.prestamo_id.confirmar_prestamo()
 
 	@api.one
 	def cancel(self):

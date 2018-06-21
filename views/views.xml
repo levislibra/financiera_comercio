@@ -106,7 +106,7 @@
                 <field name="is_change_asigned" invisible="1"/>
                 <field name="comercio_id" attrs="{'readonly': True, 'required': False}"/>
                 <field name="asigned_id" attrs="{'readonly': [('is_change_asigned', '!=', True)], 'required': False}"/>
-                <field name="create_uid"/>
+                <field name="create_uid" readonly="1"/>
               </group>
             </group>
             <notebook>
