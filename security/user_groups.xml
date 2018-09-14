@@ -15,6 +15,11 @@
     <!-- <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/> -->
     <!-- <field name="users" eval="[(4, ref('base.user_root'))]"/> -->
 
+    <record id="process_prestamo" model="res.groups">
+     <field name="name">Procesar prestamo</field>
+     <field name="category_id" ref="financiera_comercio.comercio_management"/>
+    </record>
+
     <record id="manager" model="res.groups">
       <field name="name">Administrador</field>
       <field name="implied_ids" eval="[(4, ref('financiera_comercio.process_prestamo'))]"/>
@@ -22,10 +27,7 @@
     </record>
     <!-- <field name="implied_ids" eval="[(4, ref('financiera_comercio.user'))]"/> -->
 
-    <record id="process_prestamo" model="res.groups">
-     <field name="name">Procesar prestamo</field>
-     <field name="category_id" ref="financiera_comercio.comercio_management"/>
-    </record>
+    
 
 </data>
 </openerp>

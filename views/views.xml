@@ -74,16 +74,16 @@
       <field name="name">Financiera solicitud form</field>
       <field name="model">financiera.solicitud</field>
       <field name="arch" type="xml">
-        <header>
-          <button name="send" class="oe_highlight" states="draft" string="Enviar" type="object"/>
-          <button name="processing" class="oe_highlight" states="send" string="Procesar" type="object" groups="financiera_comercio.process_prestamo" />
-          <button name="open" class="oe_highlight" states="processing" string="Validar Solicitud" type="object" groups="financiera_comercio.process_prestamo" />
-          <button name="confirm" class="oe_highlight" states="open" string="Confirmar" type="object"/>
-          <button name="draft" string="A borrador" type="object"/>
-          <button name="cancel" states="send,processing,open" string="Cancelar Solicitud" type="object"/>
-          <field name="state" readonly="0" editable="1" widget="statusbar"/>
-        </header>
         <form>
+          <header>
+            <button name="send" class="oe_highlight" states="draft" string="Enviar" type="object"/>
+            <button name="processing" class="oe_highlight" states="send" string="Procesar" type="object" groups="financiera_comercio.process_prestamo" />
+            <button name="open" class="oe_highlight" states="processing" string="Validar Solicitud" type="object" groups="financiera_comercio.process_prestamo" />
+            <button name="confirm" class="oe_highlight" states="open" string="Confirmar" type="object"/>
+            <button name="draft" string="A borrador" type="object"/>
+            <button name="cancel" states="send,processing,open" string="Cancelar Solicitud" type="object"/>
+            <field name="state" readonly="0" editable="1" widget="statusbar"/>
+          </header>
           <sheet>
             <group>
               <div class="oe_title">
