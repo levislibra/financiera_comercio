@@ -61,9 +61,7 @@ class FinancieraSolicitud(models.Model):
 			finish = date_finish
 			result = finish - start
 			minutos = result.seconds / 60
-			print result.seconds
 			hours = (result.seconds) / 60
-			print hours
 			self.send_minutes = minutos
 		else:
 			self.send_minutes = 0
