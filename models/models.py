@@ -100,8 +100,6 @@ class FinancieraPrestamo(models.Model):
 		current_user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
 		domain = []
 		entidad_id = current_user.entidad_login_id
-		# ids = self.pool.get('financiera.prestamo').browse(cr, uid, 
-		# [('sucursal_id', '=', sucursal_id)], context=context)
 		ids = []
 		if entidad_id.type == 'comercio':
 			ids = self.pool.get('financiera.prestamo').search(cr, uid, [('comercio_id', '=', entidad_id.id)])
@@ -130,7 +128,40 @@ class ExtendsResPartner(models.Model):
 	@api.model
 	def create(self, values):
 		rec = super(ExtendsResPartner, self).create(values)
+		print "user id"
+		context = dict(self._context or {})
+		current_uid = context.get('uid')
+		current_user = self.env['res.users'].browse(current_uid)
+		print current_user
+		comercio_id = current_user.entidad_login_id.id or False
+		print "COMERCIO CREADOR"
+		print current_user.entidad_login_id
 		rec.update({
 			'comercio_id': comercio_id,
 		})
 		return rec
+
+	def comercio_contacts_action(self, cr, uid, ids, context=None):
+		current_user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
+		domain = []
+		entidad_id = current_user.entidad_login_id
+		ids = []
+		if entidad_id.type == 'comercio':
+			print "comercio"
+			ids = self.pool.get('res.partner').search(cr, uid, [('comercio_id', '=', entidad_id.id)])
+		else:
+			print "NO comercio"
+			ids = self.pool.get('res.partner').search(cr, uid, [])
+		model_obj = self.pool.get('ir.model.data')
+		data_id = model_obj._get_id(cr, uid, 'base', 'res_partner_kanban_view')
+		view_id = model_obj.browse(cr, uid, data_id, context=None).res_id
+		view_form_id = model_obj.get_object_reference(cr, uid, 'base', 'res_partner_kanban_view')
+		return {
+			'domain': "[('id', 'in', ["+','.join(map(str, ids))+"])]",
+			'name': ('Contactos'),
+			'view_mode': 'kanban,tree,form',
+			'res_model': 'res.partner',
+			'view_ids': [view_id, view_form_id[1]],
+			'type': 'ir.actions.act_window',
+			'target': 'current',
+		}

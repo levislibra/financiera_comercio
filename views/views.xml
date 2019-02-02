@@ -51,7 +51,7 @@
       <field name="inherit_id" ref="financiera_prestamos.financiera_prestamo_form"/>
       <field name="arch" type="xml">        
         <xpath expr="//field[@name='sucursal_id']" position="after">
-          <field name="comercio_id" domain="[('type', '=', 'comercio')]"/>
+          <field name="comercio_id" domain="[('type', '=', 'comercio')]" readonly="1"/>
         </xpath>
       </field>
     </record>
@@ -74,6 +74,28 @@
     </record>
 
     <menuitem name="Solicitudes" id="menu_solicitudes" web_icon="financiera_comercio,static/description/solicitud.png" groups="financiera_comercio.user" action="solicitudes_control_action" sequence="10"/>
+
+
+    <record id="comercio_contacts_action" model="ir.actions.server">
+      <field name="name">Contactos</field>
+      <field name="model_id" ref="model_res_partner"/>
+      <field name="code">action = self.comercio_contacts_action(cr, uid, context.get('active_ids', []), context=context)</field>
+    </record>
+
+    <menuitem name="Contactos" id="menu_comercio_contacts" web_icon="financiera_comercio,static/description/contactos.png" sequence="2" action="comercio_contacts_action"/>
+
+    <!-- 
+    Hacemos invisible el menu Contactos origial
+    para ello creamos un grupo sin ususrios y 
+    luego se lo asignamos al menu.
+     -->
+    <record id="make_invisible" model="res.groups">
+      <field name="name">Invisible</field>
+    </record>
+
+    <record model="ir.ui.menu" id="mail.menu_contacts">
+      <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
+    </record>
 
 <!--  
     <record model="ir.ui.view" id="filter_financiera_solicitud_tree">
