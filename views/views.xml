@@ -56,7 +56,7 @@
       </field>
     </record>
 
-    <record model="ir.actions.act_window" id="solicitudes_comercio_action">
+    <!-- <record model="ir.actions.act_window" id="solicitudes_comercio_action">
       <field name="name">Solicitudes</field>
       <field name="res_model">financiera.prestamo</field>
       <field name="view_mode">tree,form</field>
@@ -65,7 +65,7 @@
         (0, 0, {'view_mode': 'tree', 'view_id': ref('financiera_prestamos.financiera_prestamo_tree')}),
         (0, 0, {'view_mode': 'form', 'view_id': ref('financiera_prestamos.financiera_prestamo_form')})]
         "/>
-    </record>
+    </record> -->
 
     <record id="solicitudes_control_action" model="ir.actions.server">
       <field name="name">Solicitudes</field>
@@ -96,6 +96,23 @@
     <record model="ir.ui.menu" id="mail.menu_contacts">
       <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
     </record>
+
+    <!-- Vista Form Partner -->
+
+    <record id="partner_form_comercio_inherited"  model="ir.ui.view">
+      <field name="name">Extension Partner form comercio</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='name']" position="after">
+          <field name="is_user_login_comercio" invisible="1"/>
+        </xpath>
+        <xpath expr="//notebook" position="attributes">
+          <attribute name="attrs">{'invisible': [('is_user_login_comercio', '=', True)]}</attribute>
+        </xpath>
+      </field>
+    </record>
+
 
 <!--  
     <record model="ir.ui.view" id="filter_financiera_solicitud_tree">
