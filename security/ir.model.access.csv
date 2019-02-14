@@ -1,16 +1,17 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 user_financiera_prestamo,financiera.prestamo,model_financiera_prestamo,financiera_comercio.user,1,1,1,0
-user_financiera_prestamo_cuota,financiera.prestamo.cuota,financiera_prestamos.model_financiera_prestamo_cuota,financiera_comercio.user,1,1,1,0
+
+user_financiera_prestamo_cuota,financiera.prestamo.cuota,financiera_prestamos.model_financiera_prestamo_cuota,financiera_comercio.user,1,1,1,1
 
 user_financiera_prestamo_evaluacion_plan,financiera.prestamo.evaluacion.plan,financiera_prestamos.model_financiera_prestamo_evaluacion_plan,financiera_comercio.user,1,1,1,1
 
-user_financiera_partner_tipo,financiera.partner.tipo,financiera_prestamos.model_financiera_partner_tipo,financiera_comercio.user,1,1,1,0
+user_financiera_partner_tipo,financiera.partner.tipo,financiera_prestamos.model_financiera_partner_tipo,financiera_comercio.user,1,0,0,0
 
-user_financiera_prestamo_plan,financiera.prestamo.plan,financiera_prestamos.model_financiera_prestamo_plan,financiera_comercio.user,1,1,1,0
+user_financiera_prestamo_plan,financiera.prestamo.plan,financiera_prestamos.model_financiera_prestamo_plan,financiera_comercio.user,1,0,0,0
 
-user_financiera_prestamo_configuracion,financiera.prestamo.configuracion,financiera_prestamos.model_financiera_prestamo_configuracion,financiera_comercio.user,1,1,1,0
+user_financiera_prestamo_configuracion,financiera.prestamo.configuracion,financiera_prestamos.model_financiera_prestamo_configuracion,financiera_comercio.user,1,0,0,0
 
-user_financiera_prestamo_tipo,financiera.prestamo.tipo,financiera_prestamos.model_financiera_prestamo_tipo,financiera_comercio.user,1,1,0,0
+user_financiera_prestamo_tipo,financiera.prestamo.tipo,financiera_prestamos.model_financiera_prestamo_tipo,financiera_comercio.user,1,0,0,0
 
 user_account_payment,account.payment,account.model_account_payment,financiera_comercio.user,1,1,1,0
 

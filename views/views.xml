@@ -10,7 +10,10 @@
       <field name="arch" type="xml">        
         <xpath expr="//field[@name='type']" position="after">
           <field name="father_id" domain="[('type', '=', 'comercio')]" attrs="{'invisible': [('type', '!=', 'comercio')]}"/>
-          <field name="sucursal_id" domain="[('type', '=', 'sucursal')]" attrs="{'invisible': [('type', '!=', 'comercio')]}"/>
+          <field name="sucursal_id" domain="[('type', '=', 'sucursal')]" attrs="{'invisible': [('type', '!=', 'comercio')], 'required': [('type', '=', 'comercio')]}"/>
+        </xpath>
+        <xpath expr="//page[2]" position="attributes">
+          <attribute name="attrs">{'invisible': [('type', '=', 'comercio')]}</attribute>
         </xpath>
       </field>
     </record>
@@ -55,17 +58,6 @@
         </xpath>
       </field>
     </record>
-
-    <!-- <record model="ir.actions.act_window" id="solicitudes_comercio_action">
-      <field name="name">Solicitudes</field>
-      <field name="res_model">financiera.prestamo</field>
-      <field name="view_mode">tree,form</field>
-      <field name="domain">[('create_uid','=', uid)]</field>
-      <field name="view_ids" eval="[(5, 0, 0), 
-        (0, 0, {'view_mode': 'tree', 'view_id': ref('financiera_prestamos.financiera_prestamo_tree')}),
-        (0, 0, {'view_mode': 'form', 'view_id': ref('financiera_prestamos.financiera_prestamo_form')})]
-        "/>
-    </record> -->
 
     <record id="solicitudes_control_action" model="ir.actions.server">
       <field name="name">Solicitudes</field>
