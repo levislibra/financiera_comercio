@@ -105,16 +105,18 @@ class FinancieraPrestamo(models.Model):
 			ids = self.pool.get('financiera.prestamo').search(cr, uid, [('comercio_id', '=', entidad_id.id)])
 		else:
 			ids = self.pool.get('financiera.prestamo').search(cr, uid, [])
-		model_obj = self.pool.get('ir.model.data')
-		data_id = model_obj._get_id(cr, uid, 'financiera_prestamos', 'financiera_prestamo_tree')
-		view_id = model_obj.browse(cr, uid, data_id, context=None).res_id
-		view_form_id = model_obj.get_object_reference(cr, uid, 'financiera_prestamos', 'financiera_prestamo_tree')
+		IrModelData = self.pool['ir.model.data']
+		tree_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'financiera_prestamos.financiera_prestamo_tree')
+		form_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'financiera_prestamos.financiera_prestamo_form')
 		return {
 			'domain': "[('id', 'in', ["+','.join(map(str, ids))+"])]",
 			'name': ('Solicitudes'),
 			'view_mode': 'tree,form',
 			'res_model': 'financiera.prestamo',
-			'view_ids': [view_id, view_form_id[1]],
+			'views': [
+                [tree_view_id, 'tree'],
+                [form_view_id, 'form'],
+            ],
 			'type': 'ir.actions.act_window',
 			'target': 'current',
 		}
@@ -154,16 +156,20 @@ class ExtendsResPartner(models.Model):
 			ids = self.pool.get('res.partner').search(cr, uid, [('comercio_id', '=', entidad_id.id)])
 		else:
 			ids = self.pool.get('res.partner').search(cr, uid, [])
-		model_obj = self.pool.get('ir.model.data')
-		data_id = model_obj._get_id(cr, uid, 'base', 'res_partner_kanban_view')
-		view_id = model_obj.browse(cr, uid, data_id, context=None).res_id
-		view_form_id = model_obj.get_object_reference(cr, uid, 'base', 'res_partner_kanban_view')
+		IrModelData = self.pool['ir.model.data']
+		kanban_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'base.res_partner_kanban_view')
+		tree_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'base.view_partner_tree')
+		form_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'base.view_partner_form')
 		return {
 			'domain': "[('id', 'in', ["+','.join(map(str, ids))+"])]",
 			'name': ('Contactos'),
 			'view_mode': 'kanban,tree,form',
 			'res_model': 'res.partner',
-			'view_ids': [view_id, view_form_id[1]],
+			'views': [
+                [kanban_view_id, 'kanban'],
+                [tree_view_id, 'tree'],
+                [form_view_id, 'form'],
+            ],
 			'type': 'ir.actions.act_window',
 			'target': 'current',
 		}
