@@ -12,7 +12,7 @@ class FinancieraSucursal(models.Model):
 	father_id = fields.Many2one('financiera.entidad', 'Comercio padre')
 	sucursal_id = fields.Many2one('financiera.entidad', 'Sucursal de dependencia')
 
-class FinancieraPrestamo(models.Model):
+class ExtendsFinancieraPrestamo(models.Model):
 	_inherit = 'financiera.prestamo'
 	_name = 'financiera.prestamo'
 
@@ -120,6 +120,39 @@ class FinancieraPrestamo(models.Model):
 			'type': 'ir.actions.act_window',
 			'target': 'current',
 		}
+
+class ExtendsFinancieraPrestamoCuota(models.Model):
+	_inherit = 'financiera.prestamo.cuota'
+	_name = 'financiera.prestamo.cuota'
+
+	comercio_id = fields.Many2one('financiera.entidad', 'Comercio', related='prestamo_id.comercio_id')
+
+	def cuotas_de_comercio(self, cr, uid, ids, context=None):
+		current_user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
+		domain = []
+		entidad_id = current_user.entidad_login_id
+		ids = []
+		if entidad_id.type == 'comercio':
+			ids = self.pool.get('financiera.prestamo.cuota').search(cr, uid, [('comercio_id', '=', entidad_id.id)])
+		else:
+			ids = self.pool.get('financiera.prestamo.cuota').search(cr, uid, [])
+		IrModelData = self.pool['ir.model.data']
+		tree_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'financiera_prestamos.financiera_prestamo_cuota_tree')
+		form_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'financiera_prestamos.financiera_prestamo_cuota_form')
+		return {
+			'domain': "[('id', 'in', ["+','.join(map(str, ids))+"])]",
+			'name': ('Cuotas del Comercio'),
+			'view_mode': 'tree,form',
+			'res_model': 'financiera.prestamo.cuota',
+			'views': [
+                [tree_view_id, 'tree'],
+                [form_view_id, 'form'],
+            ],
+			'type': 'ir.actions.act_window',
+			'target': 'current',
+			'context': {'search_default_activa':1},
+		}
+
 
 class ExtendsResPartner(models.Model):
 	_name = 'res.partner'

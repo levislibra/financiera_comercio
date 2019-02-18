@@ -4,7 +4,7 @@
 
     <record model="ir.module.category" id="comercio_management">
       <field name="name">Financiera - Solicitudes en comercios</field>
-      <field name="description">Nivel de acceso</field>
+      <field name="description">Nivel de Acceso</field>
       <field name="sequence">7</field>
     </record>
 
@@ -13,23 +13,11 @@
      <field name="category_id" ref="financiera_comercio.comercio_management"/>
     </record>
 
-    <!-- <record model="ir.module.category" id="comercio_otros_persmisos">
-      <field name="name">Financiera - Solicitudes en comercios - Otros permisos</field>
-      <field name="description">Nivel de acceso</field>
-      <field name="sequence">5</field>
-    </record> -->
-<!-- 
-    <record id="autorizar_planes" model="res.groups">
-     <field name="name">Autorizar planes</field>
-     <field name="category_id" ref="financiera_base.financiera_prestamos_general"/>
-    </record>
-
-    <record id="confirmar_prestamo" model="res.groups">
-      <field name="name">Confirmar prestamo</field>
-      <field name="category_id" ref="financiera_base.financiera_prestamos_general"/>
-    </record>
- -->
-    
+    <record id="manager" model="res.groups">
+     <field name="name">Usuario y Cobrador</field>
+     <field name="category_id" ref="financiera_comercio.comercio_management"/>
+     <field name="implied_ids" eval="[(4, ref('user'))]"/>
+    </record>    
 
 </data>
 </openerp>

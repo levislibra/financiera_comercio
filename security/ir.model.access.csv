@@ -15,5 +15,23 @@ user_financiera_prestamo_tipo,financiera.prestamo.tipo,financiera_prestamos.mode
 
 user_account_payment,account.payment,account.model_account_payment,financiera_comercio.user,1,1,1,0
 
+user_account_payment_method,account.payment.method,account.model_account_payment_method,financiera_comercio.user,1,1,1,0
+
 user_documentation,documentation,financiera_prestamos.model_documentation,financiera_comercio.user,1,1,1,0
 
+user_account_journal,account.journal,account.model_account_journal,financiera_comercio.user,1,0,0,0
+
+user_account_invoice,account.invoice,account.model_account_invoice,financiera_comercio.user,1,0,0,0
+
+user_account_move,account.move,account.model_account_move,financiera_comercio.user,1,1,1,0
+
+user_account_move_line,account.move.line,account.model_account_move_line,financiera_comercio.user,1,1,1,0
+
+user_account_partial_reconcile,account.partial.reconcile,account.model_account_partial_reconcile,financiera_comercio.user,1,1,1,0
+
+user_account_account_type,account.account.type,account.model_account_account_type,financiera_comercio.user,1,1,1,0
+
+user_account_analytic_line,account.analytic.line,account.model_account_analytic_line,financiera_comercio.user,1,1,1,0
+
+
+user_financiera_prestamo_cuota_multi_cobro,financiera.prestamo.cuota.multi.cobro,financiera_prestamos.model_financiera_prestamo_cuota_multi_cobro,financiera_comercio.user,1,1,1,0

@@ -59,6 +59,34 @@
       </field>
     </record>
 
+    <!-- Extends Cuota -->
+
+    <record id="financiera_prestamo_cuota_tree_inherited"  model="ir.ui.view">
+      <field name="name">Extension Prestamo Cuota Tree</field>
+      <field name="model">financiera.prestamo.cuota</field>
+      <field name="inherit_id" ref="financiera_prestamos.financiera_prestamo_cuota_tree"/>
+      <field name="arch" type="xml">        
+        <xpath expr="//field[@name='sucursal_id']" position="after">
+          <field name="comercio_id" domain="[('type', '=', 'comercio')]"/>
+        </xpath>
+      </field>
+    </record>
+
+
+    <record id="financiera_prestamo_cuota_form_inherited"  model="ir.ui.view">
+      <field name="name">Extension Prestamo Cuota Form</field>
+      <field name="model">financiera.prestamo.cuota</field>
+      <field name="inherit_id" ref="financiera_prestamos.financiera_prestamo_cuota_form"/>
+      <field name="arch" type="xml">        
+        <xpath expr="//field[@name='sucursal_id']" position="after">
+          <field name="comercio_id" domain="[('type', '=', 'comercio')]" readonly="1"/>
+        </xpath>
+      </field>
+    </record>
+
+
+    <!-- PRESTAMOS FILTRADOS -->
+
     <record id="solicitudes_control_action" model="ir.actions.server">
       <field name="name">Solicitudes</field>
       <field name="model_id" ref="model_financiera_prestamo"/>
@@ -67,6 +95,17 @@
 
     <menuitem name="Solicitudes" id="menu_solicitudes" web_icon="financiera_comercio,static/description/solicitud.png" groups="financiera_comercio.user" action="solicitudes_control_action" sequence="10"/>
 
+    <!-- CUOTAS FILTRADOS -->
+
+    <record id="cuotas_control_action" model="ir.actions.server">
+      <field name="name">Cuotas</field>
+      <field name="model_id" ref="model_financiera_prestamo_cuota"/>
+      <field name="code">action = self.cuotas_de_comercio(cr, uid, context.get('active_ids', []), context=context)</field>
+    </record>
+
+    <menuitem name="Cuotas" id="menu_cuotas" web_icon="financiera_comercio,static/description/cuotas.png" groups="financiera_comercio.manager" action="cuotas_control_action" sequence="20"/>
+
+    <!-- CONTACTOS FILTRADOS -->
 
     <record id="comercio_contacts_action" model="ir.actions.server">
       <field name="name">Contactos</field>
