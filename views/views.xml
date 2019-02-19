@@ -48,6 +48,18 @@
       </field>
     </record>
 
+    <!-- vista edicion manual tree -->
+    <record id="financiera_prestamo_edicion_manual_tree_inherited"  model="ir.ui.view">
+      <field name="name">Extension Prestamo Tree</field>
+      <field name="model">financiera.prestamo</field>
+      <field name="inherit_id" ref="financiera_prestamos.financiera_prestamo_edicion_manual_tree"/>
+      <field name="arch" type="xml">        
+        <xpath expr="//field[@name='sucursal_id']" position="after">
+          <field name="comercio_id" domain="[('type', '=', 'comercio')]"/>
+        </xpath>
+      </field>
+    </record>
+
     <record id="financiera_prestamo_form_inherited"  model="ir.ui.view">
       <field name="name">Extension Prestamo Form</field>
       <field name="model">financiera.prestamo</field>
