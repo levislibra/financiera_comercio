@@ -27,7 +27,7 @@ class ExtendsFinancieraPrestamo(models.Model):
 
 	@api.model
 	def default_get(self, fields):
-		rec = super(FinancieraPrestamo, self).default_get(fields)
+		rec = super(ExtendsFinancieraPrestamo, self).default_get(fields)
 		context = dict(self._context or {})
 		current_uid = context.get('uid')
 		current_user = self.env['res.users'].browse(current_uid)
