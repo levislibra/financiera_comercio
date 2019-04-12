@@ -121,6 +121,27 @@ class ExtendsFinancieraPrestamo(models.Model):
 			'target': 'current',
 		}
 
+	@api.one
+	def asignar_planes_disponibles(self):
+		cr = self.env.cr
+		uid = self.env.uid
+		# self.actualizar_cupo()
+		planes_obj = self.pool.get('financiera.prestamo.plan')
+		planes_ids = planes_obj.search(cr, uid, [('state', '=', 'confirmado')])
+		self.delete_planes()
+		for _id in planes_ids:
+			plan_id = self.env['financiera.prestamo.plan'].browse(_id)
+			if len(plan_id.prestamo_tipo_ids) == 0 or self.prestamo_tipo_id in plan_id.prestamo_tipo_ids:
+				if len(plan_id.sucursal_ids) == 0 or self.sucursal_id in plan_id.sucursal_ids or self.comercio_id in plan_id.sucursal_ids:
+					if len(plan_id.partner_tipo_ids) == 0 or self.partner_id.partner_tipo_id in plan_id.partner_tipo_ids:
+						fpep_values = {
+								'prestamo_id': self.id,
+								'plan_id': plan_id.id,
+						}
+						fpep_id = self.env['financiera.prestamo.evaluacion.plan'].create(fpep_values)
+						fpep_id.set_fecha_primer_vencimiento()
+						self.plan_ids = [fpep_id.id]
+
 class ExtendsFinancieraPrestamoCuota(models.Model):
 	_inherit = 'financiera.prestamo.cuota'
 	_name = 'financiera.prestamo.cuota'
