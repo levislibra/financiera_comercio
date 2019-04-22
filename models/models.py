@@ -121,26 +121,31 @@ class ExtendsFinancieraPrestamo(models.Model):
 			'target': 'current',
 		}
 
+	# Esta funcion es reemplazada en caso de que este instalado
+	# el modulo financiera_comercio
 	@api.one
 	def asignar_planes_disponibles(self):
 		cr = self.env.cr
 		uid = self.env.uid
 		# self.actualizar_cupo()
 		planes_obj = self.pool.get('financiera.prestamo.plan')
-		planes_ids = planes_obj.search(cr, uid, [('state', '=', 'confirmado')])
+		planes_ids = planes_obj.search(cr, uid, [('state', '=', 'confirmado'),
+			('es_refinanciacion', '=', self.es_refinanciacion)])
+
 		self.delete_planes()
 		for _id in planes_ids:
 			plan_id = self.env['financiera.prestamo.plan'].browse(_id)
 			if len(plan_id.prestamo_tipo_ids) == 0 or self.prestamo_tipo_id in plan_id.prestamo_tipo_ids:
 				if len(plan_id.sucursal_ids) == 0 or self.sucursal_id in plan_id.sucursal_ids or self.comercio_id in plan_id.sucursal_ids:
 					if len(plan_id.partner_tipo_ids) == 0 or self.partner_id.partner_tipo_id in plan_id.partner_tipo_ids:
-						fpep_values = {
-								'prestamo_id': self.id,
-								'plan_id': plan_id.id,
-						}
-						fpep_id = self.env['financiera.prestamo.evaluacion.plan'].create(fpep_values)
-						fpep_id.set_fecha_primer_vencimiento()
-						self.plan_ids = [fpep_id.id]
+						if (plan_id.recibo_de_sueldo == True and self.partner_id.recibo_de_sueldo == True) or (plan_id.recibo_de_sueldo == False):
+							fpep_values = {
+									'prestamo_id': self.id,
+									'plan_id': plan_id.id,
+							}
+							fpep_id = self.env['financiera.prestamo.evaluacion.plan'].create(fpep_values)
+							fpep_id.set_fecha_primer_vencimiento()
+							self.plan_ids = [fpep_id.id]
 
 class ExtendsFinancieraPrestamoCuota(models.Model):
 	_inherit = 'financiera.prestamo.cuota'
