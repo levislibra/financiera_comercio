@@ -12,9 +12,9 @@
           <field name="father_id" domain="[('type', '=', 'comercio')]" attrs="{'invisible': [('type', '!=', 'comercio')]}"/>
           <field name="sucursal_id" domain="[('type', '=', 'sucursal')]" attrs="{'invisible': [('type', '!=', 'comercio')], 'required': [('type', '=', 'comercio')]}"/>
         </xpath>
-        <xpath expr="//page[2]" position="attributes">
+        <!-- <xpath expr="//page[2]" position="attributes">
           <attribute name="attrs">{'invisible': [('type', '=', 'comercio')]}</attribute>
-        </xpath>
+        </xpath> -->
       </field>
     </record>
 
