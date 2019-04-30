@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<odoo noupdate="1">
+<openerp>
+    <!-- <data noupdate="0"> -->
 
-    <!-- <record id="ir_cron_notificaction_solicitudes" model="ir.cron">
-        <field name="name">Notificaciones de solicitudes</field>
-        <field name="user_id" ref="base.user_root" />
-        <field name="interval_number">1</field>
-        <field name="interval_type">minutes</field>
-        <field name="numbercall">-1</field>
-        <field name="nextcall"
-               eval="(datetime.now() + timedelta(minutes=1)).strftime('%Y-%m-%d 00:00:00')"
-               />
-        <field name="model">financiera.solicitud</field>
-        <field name="function">notification_solicitudes</field>
-    </record> -->
+        <record id="ir_cron_asignar_comercio_a_cuota" model="ir.cron">
+            <field name="name">Actualizar comercio a cuotas</field>
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">0</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">0</field>
+            <field name="doall" eval="False"/>
+            <field name="nextcall" >2019-01-01 04:00:00</field>
+            <field name="model">financiera.prestamo.cuota</field>
+            <field name="function">_actualizar_comercio_cuotas</field>
+        </record>
 
-</odoo>
+    <!-- </data> -->
+
+</openerp>

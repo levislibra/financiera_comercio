@@ -3,6 +3,9 @@
 from openerp import tools, models, fields, api
 from ast import literal_eval
 from datetime import datetime, timedelta
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class FinancieraSucursal(models.Model):
 	_inherit = 'financiera.entidad' 
@@ -151,7 +154,31 @@ class ExtendsFinancieraPrestamoCuota(models.Model):
 	_inherit = 'financiera.prestamo.cuota'
 	_name = 'financiera.prestamo.cuota'
 
-	comercio_id = fields.Many2one('financiera.entidad', 'Comercio', related='prestamo_id.comercio_id')
+	comercio_id = fields.Many2one('financiera.entidad', 'Comercio')
+
+	@api.model
+	def _actualizar_comercio_cuotas(self):
+		cr = self.env.cr
+		uid = self.env.uid
+		cuotas_obj = self.pool.get('financiera.prestamo.cuota')
+		cuotas_ids = cuotas_obj.search(cr, uid, [
+				('comercio_id', '=', None)
+			])
+		_logger.info('Init Actualizar comercio en cuotas')
+		count = 0
+		for _id in cuotas_ids:
+			cuota_id = cuotas_obj.browse(cr, uid, _id)
+			cuota_id.comercio_id = cuota_id.prestamo_id.comercio_id.id
+			count += 1
+		_logger.info('Finish Actualizar comercio de cuotas: %s cuotas actualizadas', count)
+
+	@api.model
+	def default_get(self, fields):
+		rec = super(ExtendsFinancieraPrestamoCuota, self).default_get(fields)
+		rec.update({
+			'sucursal_id': rec.prestamo_id.comercio_id.id,
+		})
+
 
 	def cuotas_de_comercio(self, cr, uid, ids, context=None):
 		current_user = self.pool.get('res.users').browse(cr, uid, uid, context=context)

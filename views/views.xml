@@ -96,6 +96,22 @@
       </field>
     </record>
 
+      <!-- Extends Cuota Pivote view rewrite -->
+
+    <record model="ir.ui.view" id="financiera_prestamos.financiera_prestamo_cuota_pivot">
+      <field name="name">Cuota</field>
+      <field name="model">financiera.prestamo.cuota</field>
+      <!-- <field name="inherit_id" ref="financiera_prestamos.financiera_prestamo_cuota_pivot"/> -->
+      <field name="arch" type="xml">
+        <pivot string="Cuotas">
+          <field name="comercio_id" type="row"/>
+          <field name="saldo_store" type="measure"/>
+          <field name="fecha_vencimiento" type="col"/>
+        </pivot>
+      </field>
+    </record>
+
+
 
     <!-- PRESTAMOS FILTRADOS -->
 
