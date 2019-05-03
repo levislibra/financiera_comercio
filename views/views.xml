@@ -70,6 +70,32 @@
         </xpath>
       </field>
     </record>
+ 
+
+    <!-- Analisis y Reportes -->
+
+    <!-- Graph view segun comercio -->
+
+    <record model="ir.ui.view" id="financiera_prestamo_comercio_graph">
+      <field name="name">Prestamos segun sucursal</field>
+      <field name="model">financiera.prestamo</field>
+      <field name="arch" type="xml">
+        <graph string="Prestamos" disable_linking="True" type="pie">
+          <field name="comercio_id" type="row"/>
+          <field name="monto_solicitado" type="measure"/>
+        </graph>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="financiera_prestamo_comercio_graph_action">
+      <field name="name">Prestamos segun sucursal</field>
+      <field name="res_model">financiera.prestamo</field>
+      <field name="view_mode">graph</field>
+      <field name="view_ids" eval="[(5, 0, 0), 
+        (0, 0, {'view_mode': 'graph', 'view_id': ref('financiera_prestamo_comercio_graph')})]"/>
+    </record>
+
+    <menuitem name="Grafico segun comercio" id="menu_prestamos_graph_comercio_action" sequence="100" parent="financiera_prestamos.menu_prestamos_reportes" action="financiera_prestamo_comercio_graph_action"/>
 
     <!-- Extends Cuota -->
 
