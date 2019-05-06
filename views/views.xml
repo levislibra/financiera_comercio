@@ -74,7 +74,7 @@
 
     <!-- Analisis y Reportes -->
 
-    <!-- Graph view segun comercio -->
+    <!-- Graph view Prestamos segun comercio -->
 
     <record model="ir.ui.view" id="financiera_prestamo_comercio_graph">
       <field name="name">Prestamos segun sucursal</field>
@@ -96,6 +96,27 @@
     </record>
 
     <menuitem name="Grafico segun comercio" id="menu_prestamos_graph_comercio_action" sequence="100" parent="financiera_prestamos.menu_prestamos_reportes" action="financiera_prestamo_comercio_graph_action"/>
+
+    <!-- Graph views Cuotas segun comercio -->
+
+    <record id="financiera_prestamo_cuota_comercio_graph" model="ir.ui.view">
+      <field name="name">Grafico segun comercio</field>
+      <field name="model">financiera.prestamo.cuota</field>
+      <field name="arch" type="xml">
+        <graph string="Grafico segun comercio" disable_linking="True" type="pie">
+          <field name="comercio_id" type="row"/>
+          <field name="saldo_store" type="measure"/>
+        </graph>
+      </field>
+    </record>
+
+    <record id="financiera_prestamo_cuota_comercio_graph_action" model="ir.actions.server">
+      <field name="name">Grafico segun comercio</field>
+      <field name="model_id" ref="model_financiera_prestamo_cuota"/>
+      <field name="code">action = self.reporte_graph_comercio_cuotas(cr, uid, context.get('active_ids', []), context=context)</field>
+    </record>
+
+    <menuitem name="Grafico segun comercio" id="menu_cuotas_graph_comercio_action" sequence="120" parent="financiera_prestamos.menu_cuotas_reportes" action="financiera_prestamo_cuota_comercio_graph_action"/>
 
     <!-- Extends Cuota -->
 

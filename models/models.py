@@ -206,6 +206,30 @@ class ExtendsFinancieraPrestamoCuota(models.Model):
 			'context': {'search_default_activa':1},
 		}
 
+	def reporte_graph_comercio_cuotas(self, cr, uid, ids, context=None):
+		cuotas_obj = self.pool.get('financiera.prestamo.cuota')
+		ids = cuotas_obj.search(cr, uid, [])
+		for _id in ids:
+			cuota_id = cuotas_obj.browse(cr, uid, _id)
+			cuota_id.saldo_store = cuota_id.saldo
+			cuota_id.cobrado_store = cuota_id.cobrado
+			cuota_id.punitorio_store = cuota_id.punitorio
+			cuota_id.total_store = cuota_id.total
+		model_obj = self.pool.get('ir.model.data')
+		data_id = model_obj._get_id(cr, uid, 'financiera_comercio', 'financiera_prestamo_cuota_comercio_graph')
+		view_id = model_obj.browse(cr, uid, data_id, context=None).res_id
+		
+		return {
+			'domain': "[('id', 'in', ["+','.join(map(str, ids))+"])]",
+			'name': ('Grafico de cuotas segun comercio'),
+			'view_mode': 'graph',
+			'res_model': 'financiera.prestamo.cuota',
+			'view_id': view_id,
+			'type': 'ir.actions.act_window',
+			'target': 'current',
+			# 'context': {'search_default_a_facturar_mayor':1},
+		}
+
 
 class ExtendsResPartner(models.Model):
 	_name = 'res.partner'
