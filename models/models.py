@@ -173,11 +173,12 @@ class ExtendsFinancieraPrestamoCuota(models.Model):
 		_logger.info('Finish Actualizar comercio de cuotas: %s cuotas actualizadas', count)
 
 	@api.model
-	def default_get(self, fields):
-		rec = super(ExtendsFinancieraPrestamoCuota, self).default_get(fields)
+	def create(self, values):
+		rec = super(ExtendsFinancieraPrestamoCuota, self).create(values)
 		rec.update({
-			'sucursal_id': rec.prestamo_id.comercio_id.id,
+			'comercio_id': rec.prestamo_id.comercio_id.id,
 		})
+		return rec
 
 
 	def cuotas_de_comercio(self, cr, uid, ids, context=None):
