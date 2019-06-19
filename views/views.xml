@@ -70,8 +70,7 @@
         </xpath>
       </field>
     </record>
- 
-
+    
     <!-- Analisis y Reportes -->
 
     <!-- Graph view Prestamos segun comercio -->
@@ -202,43 +201,5 @@
       </field>
     </record>
 
-
-<!--  
-    <record model="ir.ui.view" id="filter_financiera_solicitud_tree">
-      <field name="name">financiera.solicitud.filter</field>
-      <field name="model">financiera.solicitud</field>
-      <field name="arch" type="xml">
-        <search>
-          <filter string="Pendientes" groups="financiera_comercio.manager" name="pendientes" domain="[('state','in', ('send', 'processing'))]"/>
-          <separator/>
-          <filter string="Mis asignadas" groups="financiera_comercio.manager" name="mis_solicitudes" domain="[('asigned_id','=', uid)]"/>
-          <separator/>
-          <field name="name"/>
-          <field name="partner_id"/>
-          <field name="comercio_id"/>
-          <field name="asigned_id"/>
-          <field name="state"/>
-        </search>
-      </field>
-    </record>
-    
-
- -->
-
-    <!-- Solicitudes - Comercios -->
-
-<!--     <record model="ir.actions.act_window" id="solicitudes_comercio_action">
-      <field name="name">Solicitudes a enviar</field>
-      <field name="res_model">financiera.solicitud</field>
-      <field name="view_mode">tree,form</field>
-      <field name="domain">[('create_uid','=', uid)]</field>
-      <field name="view_ids" eval="[(5, 0, 0), 
-        (0, 0, {'view_mode': 'tree', 'view_id': ref('financiera_solicitud_tree')}),
-        (0, 0, {'view_mode': 'form', 'view_id': ref('financiera_solicitud_form')})]
-        "/>
-    </record>
-
-    <menuitem name="Solicitudes" id="menu_solicitudes_comercios" groups="financiera_comercio.user" action="solicitudes_comercio_action" web_icon="financiera_comercio,static/description/solicitud.png" sequence="20"/>
- -->
   </data>
 </openerp>

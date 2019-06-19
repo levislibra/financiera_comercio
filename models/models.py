@@ -132,9 +132,10 @@ class ExtendsFinancieraPrestamo(models.Model):
 		uid = self.env.uid
 		# self.actualizar_cupo()
 		planes_obj = self.pool.get('financiera.prestamo.plan')
-		planes_ids = planes_obj.search(cr, uid, [('state', '=', 'confirmado'),
-			('es_refinanciacion', '=', self.es_refinanciacion)])
-
+		planes_ids = planes_obj.search(cr, uid, [
+			('state', '=', 'confirmado'),
+			('es_refinanciacion', '=', self.es_refinanciacion),
+			('company_id', '=', self.company_id.id)])
 		self.delete_planes()
 		for _id in planes_ids:
 			plan_id = self.env['financiera.prestamo.plan'].browse(_id)
