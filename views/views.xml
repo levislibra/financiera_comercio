@@ -143,7 +143,7 @@
     </record>
 
     <!-- PRESTAMOS FILTRADOS -->
-
+<!-- 
     <record id="solicitudes_control_action" model="ir.actions.server">
       <field name="name">Solicitudes</field>
       <field name="model_id" ref="model_financiera_prestamo"/>
@@ -151,27 +151,31 @@
     </record>
 
     <menuitem name="Solicitudes" id="menu_solicitudes" web_icon="financiera_comercio,static/description/solicitud.png" groups="financiera_comercio.user" action="solicitudes_control_action" sequence="10"/>
+ -->
+    <menuitem name="Solicitudes" id="menu_solicitudes" web_icon="financiera_comercio,static/description/solicitud.png" groups="financiera_comercio.user" action="financiera_prestamos.financiera_prestamo_action" sequence="10"/>
 
     <!-- CUOTAS FILTRADOS -->
 
-    <record id="cuotas_control_action" model="ir.actions.server">
+<!--     <record id="cuotas_control_action" model="ir.actions.server">
       <field name="name">Cuotas</field>
       <field name="model_id" ref="model_financiera_prestamo_cuota"/>
       <field name="code">action = self.cuotas_de_comercio(cr, uid, context.get('active_ids', []), context=context)</field>
     </record>
 
     <menuitem name="Cuotas" id="menu_cuotas" web_icon="financiera_comercio,static/description/cuotas.png" groups="financiera_comercio.manager" action="cuotas_control_action" sequence="20"/>
+ -->
 
+    <menuitem name="Cuotas" id="menu_cuotas" web_icon="financiera_comercio,static/description/cuotas.png" groups="financiera_comercio.manager" action="financiera_prestamos.financiera_prestamo_cuota_action" sequence="20"/>
     <!-- CONTACTOS FILTRADOS -->
 
-    <record id="comercio_contacts_action" model="ir.actions.server">
+<!--     <record id="comercio_contacts_action" model="ir.actions.server">
       <field name="name">Contactos</field>
       <field name="model_id" ref="model_res_partner"/>
       <field name="code">action = self.comercio_contacts_action(cr, uid, context.get('active_ids', []), context=context)</field>
     </record>
 
     <menuitem name="Contactos" id="menu_comercio_contacts" web_icon="financiera_comercio,static/description/contactos.png" sequence="2" action="comercio_contacts_action"/>
-
+ -->
     <!-- 
     Hacemos invisible el menu Contactos origial
     para ello creamos un grupo sin ususrios y 

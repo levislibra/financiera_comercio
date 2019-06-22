@@ -25,6 +25,7 @@
     'data': [
         'security/user_groups.xml',
         'security/ir.model.access.csv',
+        'security/security.xml',
         'views/views.xml',
         'data/ir_cron.xml',
         'views/reports.xml',
