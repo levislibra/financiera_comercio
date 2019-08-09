@@ -35,3 +35,5 @@ user_account_analytic_line,account.analytic.line,account.model_account_analytic_
 
 
 user_financiera_prestamo_cuota_multi_cobro,financiera.prestamo.cuota.multi.cobro,financiera_prestamos.model_financiera_prestamo_cuota_multi_cobro,financiera_comercio.user,1,1,1,0
+
+user_account_invoice,account.invoice,account.model_account_invoice,financiera_comercio.user,1,1,1,0
