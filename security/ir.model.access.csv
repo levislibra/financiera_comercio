@@ -33,7 +33,18 @@ user_account_account_type,account.account.type,account.model_account_account_typ
 
 user_account_analytic_line,account.analytic.line,account.model_account_analytic_line,financiera_comercio.user,1,1,1,0
 
-
 user_financiera_prestamo_cuota_multi_cobro,financiera.prestamo.cuota.multi.cobro,financiera_prestamos.model_financiera_prestamo_cuota_multi_cobro,financiera_comercio.user,1,1,1,0
 
+user_financiera_prestamo_cuota_multi_factura,financiera.prestamo.cuota.multi.factura,financiera_prestamos.model_financiera_prestamo_cuota_multi_factura,financiera_comercio.user,1,1,1,1
+
 user_account_invoice,account.invoice,account.model_account_invoice,financiera_comercio.user,1,1,1,0
+
+user_account_invoice_line,account.invoice.line,account.model_account_invoice_line,financiera_comercio.user,1,1,1,0
+
+user_account_invoice_tax,account.invoice.tax,account.model_account_invoice_tax,financiera_comercio.user,1,1,1,0
+
+user_product_product,product.product,product.model_product_product,financiera_comercio.user,1,1,1,0
+
+user_product_template,product.template,product.model_product_template,financiera_comercio.user,1,1,1,1
+
+user_product_price_history,product.price.history,product.model_product_price_history,financiera_comercio.user,1,1,1,1
