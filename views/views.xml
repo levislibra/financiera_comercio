@@ -66,7 +66,7 @@
       <field name="inherit_id" ref="financiera_prestamos.financiera_prestamo_form"/>
       <field name="arch" type="xml">        
         <xpath expr="//field[@name='sucursal_id']" position="after">
-          <field name="comercio_id" domain="[('type', '=', 'comercio')]" readonly="1"/>
+          <field name="comercio_id" domain="[('type', '=', 'comercio')]"/>
         </xpath>
       </field>
     </record>
