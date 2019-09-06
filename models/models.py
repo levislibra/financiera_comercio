@@ -20,7 +20,10 @@ class ExtendsFinancieraPrestamo(models.Model):
 	_name = 'financiera.prestamo'
 
 	comercio_id = fields.Many2one('financiera.entidad', 'Comercio')
+	comercio_asignado = fields.Boolean('Comercio esta asignado?', compute='_compute_comercio_asignado')
 	asigned_id = fields.Many2one('res.users', 'Asignado a')
+	pago_a_comercio = fields.Boolean('Pago a comercio')
+	pago_a_comercio_fecha = fields.Date('Fecha de pago pactada')
 	# Control time
 	send_time = fields.Datetime('Hora de envio')
 	send_minutes = fields.Float('Minutos en envio', compute='_compute_send_minutes')
@@ -41,6 +44,12 @@ class ExtendsFinancieraPrestamo(models.Model):
 				'comercio_id': entidad_id.id,
 			})
 		return rec
+
+	@api.one
+	def _compute_comercio_asignado(self):
+		self.comercio_asignado = False
+		if len(self.comercio_id) > 0:
+			self.comercio_asignado = True
 
 	@api.one
 	def _compute_send_minutes(self):
@@ -151,6 +160,17 @@ class ExtendsFinancieraPrestamo(models.Model):
 							fpep_id.set_fecha_primer_vencimiento()
 							self.plan_ids = [fpep_id.id]
 
+	# @api.one
+	# def enviar_a_acreditacion_pendiente(self):
+	@api.one
+	def calcular_cuotas_plan(self):
+		rec = super(ExtendsFinancieraPrestamo, self).calcular_cuotas_plan()
+		self.pago_a_comercio = self.plan_id.pago_a_comercio
+		if self.plan_id.pago_a_comercio and len(self.comercio_id) > 0:
+			self.pago_a_comercio_fecha = datetime.strptime(self.fecha, "%Y-%m-%d") + timedelta(days=self.plan_id.pago_a_comercio_dias)
+		else:
+			self.pago_a_comercio_fecha = False
+
 class ExtendsFinancieraPrestamoCuota(models.Model):
 	_inherit = 'financiera.prestamo.cuota'
 	_name = 'financiera.prestamo.cuota'
@@ -232,6 +252,13 @@ class ExtendsFinancieraPrestamoCuota(models.Model):
 			# 'context': {'search_default_a_facturar_mayor':1},
 		}
 
+class ExtendsFinancieraPrestamoPlan(models.Model):
+	_inherit = 'financiera.prestamo.plan'
+	_name = 'financiera.prestamo.plan'
+
+	# Pago a Comercio
+	pago_a_comercio = fields.Boolean('Pago a comercio')
+	pago_a_comercio_dias = fields.Integer('Dias para la fecha de pago')
 
 class ExtendsResPartner(models.Model):
 	_name = 'res.partner'

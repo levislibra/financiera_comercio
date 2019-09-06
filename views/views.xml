@@ -66,11 +66,31 @@
       <field name="inherit_id" ref="financiera_prestamos.financiera_prestamo_form"/>
       <field name="arch" type="xml">        
         <xpath expr="//field[@name='sucursal_id']" position="after">
-          <field name="comercio_id" domain="[('type', '=', 'comercio')]"/>
+          <field name="comercio_id" domain="[('type', '=', 'comercio')]" attrs="{'readonly': [('state', 'not in', ('solicitado', 'revision', 'autorizado'))]}"/>
+          <field name="comercio_asignado" invisible="1"/>
+          <field name="pago_a_comercio" attrs="{'invisible': [('comercio_asignado', '=', False)], 'readonly': [('state', 'not in', ('solicitado', 'revision', 'autorizado'))]}"/>
+          <field name="pago_a_comercio_fecha" attrs="{'invisible': [('pago_a_comercio', '=', False)], 'readonly': [('state', 'not in', ('solicitado', 'revision', 'autorizado'))]}"/>
         </xpath>
       </field>
     </record>
+
+    <!-- Plan -->
     
+    <record id="financiera_prestamo_plan_form_inherited"  model="ir.ui.view">
+      <field name="name">Extension Prestamo Form</field>
+      <field name="model">financiera.prestamo.plan</field>
+      <field name="inherit_id" ref="financiera_prestamos.financiera_prestamo_plan_form"/>
+      <field name="arch" type="xml">        
+        <xpath expr="/form/sheet/group/group[7]" position="after">
+          <group string="Pago a Comercio">
+            <field name="pago_a_comercio"/>
+            <field name="pago_a_comercio_dias" attes="{'invisible': [('pago_a_comercio', '=', False)]}"/>
+          </group>
+        </xpath>
+      </field>
+    </record>
+
+
     <!-- Analisis y Reportes -->
 
     <!-- Graph view Prestamos segun comercio -->
