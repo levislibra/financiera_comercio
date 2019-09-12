@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- View Pago a Comercio -->
+
+    <record id="pago_comercio_wizard" model="ir.ui.view">
+      <field name="name">Pago a Comercio</field>
+      <field name="model">financiera.pago.comercio.wizard</field>
+      <field name="arch" type="xml">
+        <form string="Pago a Comercio">
+          <footer>
+            <button name="confirmar" string="Confirmar" type="object" class="btn-primary"/>
+            <button string="Cancel" class="btn-default" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+    <act_window
+      id="pago_comercio_action"
+      name="Crear pago a comercio"
+      res_model="financiera.pago.comercio.wizard"
+      src_model="financiera.prestamo"
+      view_mode="form"
+      multi="True"
+      target="new"
+      view_id="financiera_prestamo_pendiente_pago_comercio_tree"
+    />
+
+    <!-- Confirmar pago a comercio -->
+
+    <record id="confirmar_pago_comercio_wizard" model="ir.ui.view">
+        <field name="name">Pagar prestamo</field>
+        <field name="model">financiera.prestamo.pagar.wizard</field>
+        <field name="arch" type="xml">
+          <form string="Prestamo">
+            <sheet>
+              <group>
+                <field name="payment_date" required="1"/>
+                <field name="currency_id" readonly="1"/>
+                <field name="journal_id" domain="[('id', 'in', domain)]" required="1"/>
+                <field name="monto_pagado" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                <field name="payment_communication"/>
+              </group>
+            </sheet>
+            <footer>
+              <button name="confirmar_pago_comercio" string="Pagar a comercio" type="object" class="btn-primary"/>
+              <button string="Cancel" class="btn-default" special="cancel"/>   
+            </footer>
+          </form>
+        </field>
+    </record>
+
+
+</odoo>

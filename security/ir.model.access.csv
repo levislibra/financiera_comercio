@@ -48,3 +48,5 @@ user_product_product,product.product,product.model_product_product,financiera_co
 user_product_template,product.template,product.model_product_template,financiera_comercio.user,1,1,1,1
 
 user_product_price_history,product.price.history,product.model_product_price_history,financiera_comercio.user,1,1,1,1
+
+user_financiera_pago_comercio,financiera.pago.comercio,model_financiera_pago_comercio,financiera_prestamos.user,1,1,1,0

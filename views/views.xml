@@ -35,6 +35,104 @@
 
     <menuitem name="Comercios" id="menu_comercios_action" parent="financiera_base.menu_sucursales" action="financiera_comercio_action"/>
 
+    <!-- Pago a comercio -->
+
+    <record model="ir.ui.view" id="financiera_pago_comercio_tree">
+      <field name="name">financiera.pago.comercio.tree</field>
+      <field name="model">financiera.pago.comercio</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="fecha"/>
+          <field name="comercio_id"/>
+          <field name="monto"/>
+          <field name="state"/>
+          <field name="company_id" groups="base.group_erp_manager"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="financiera_pago_comercio_form" model="ir.ui.view">
+        <field name="name">financiera.pago.comercio.form</field>
+        <field name="model">financiera.pago.comercio</field>
+        <field name="arch" type="xml">
+          <form>
+            <header>
+              <button name="wizard_confirmar_pago_comercio" states="borrador" string="Crear pago" type="object" class="oe_highlight"/>
+              <button name="cancelar" states="borrador,pagado" string="Cancelar pago" type="object"/>
+              <field name="state" widget="statusbar"/>
+            </header>
+            <sheet>
+              <group>
+                <field name="name"/>
+                <field name="fecha"/>
+                <field name="comercio_id" readonly="1"/>
+                <field name="monto" readonly="1"/>
+              </group>
+              <notebook>
+                <page string="Prestamos a pagar">
+                  <field name="prestamo_ids">
+                    <tree create="false" edit="false">
+                      <field name="partner_id"/>
+                      <field name="pago_a_comercio_fecha"/>
+                      <field name="saldo_a_pagar" sum="Total"/>
+                      <field name="name"/>
+                      <field name="fecha"/>
+                      <field name="monto_solicitado" sum="Total"/>
+                      <field name="state"/>
+                    </tree>
+                  </field>
+                </page>
+                <page string="Pagos generados">
+                  <group>
+                    <field name="pago_ids" readonly="1"/>
+                  </group>
+                </page>
+              </notebook>
+            </sheet>
+          </form>
+        </field>
+    </record>
+  
+    <record model="ir.actions.act_window" id="financiera_pago_comercio_action">
+      <field name="name">Pagos a Comercios</field>
+      <field name="res_model">financiera.pago.comercio</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="financiera_pago_comercio_tree"/>
+    </record>
+
+    <menuitem name="Pagos a comercios" id="menu_pago_comercio_action" parent="financiera_prestamos.smenu_lotes" action="financiera_pago_comercio_action" sequence="110"/>
+
+    <!-- Vista para generar pago a comercio -->
+
+    <record model="ir.ui.view" id="financiera_prestamo_pendiente_pago_comercio_tree">
+      <field name="name">financiera.prestamo.pendiente.pago.comercio.tree</field>
+      <field name="model">financiera.prestamo</field>
+      <field name="arch" type="xml">
+        <tree create="false" edit="false" delete="false">
+          <field name="partner_id"/>
+          <field name="pago_a_comercio_fecha"/>
+          <field name="saldo_a_pagar" sum="Total"/>
+          <field name="name"/>
+          <field name="prestamo_tipo_id"/>
+          <field name="comercio_id"/>
+          <field name="state"/>
+          <field name="company_id" groups="base.group_erp_manager"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="financiera_prestamo_pendiente_pago_comercio_action">
+      <field name="name">Prestamos pendientes de pago a comercio</field>
+      <field name="res_model">financiera.prestamo</field>
+      <field name="view_mode">tree</field>
+      <field name="domain">[('pago_a_comercio', '=', True), ('state', '=', 'acreditacion_pendiente')]</field>
+      <field name="view_id" ref="financiera_prestamo_pendiente_pago_comercio_tree"/>
+    </record>
+
+    <menuitem name="Prestamos pendientes de pago a comercio" id="menu_prestamos_pendientes_pago_comercio_action" parent="financiera_prestamos.menu_prestamos" action="financiera_prestamo_pendiente_pago_comercio_action" sequence="7"/>
+
+
     <!-- Vista Prestamo Inherited -->
 
     <record id="financiera_prestamo_tree_inherited"  model="ir.ui.view">
@@ -201,14 +299,14 @@
     para ello creamos un grupo sin ususrios y 
     luego se lo asignamos al menu.
      -->
-    <record id="make_invisible" model="res.groups">
+<!--     <record id="make_invisible" model="res.groups">
       <field name="name">Invisible</field>
     </record>
 
     <record model="ir.ui.menu" id="mail.menu_contacts">
       <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
     </record>
-
+ -->
     <!-- Vista Form Partner -->
 
     <record id="partner_form_comercio_inherited"  model="ir.ui.view">

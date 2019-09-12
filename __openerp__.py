@@ -29,6 +29,7 @@
         'views/views.xml',
         'data/ir_cron.xml',
         'views/reports.xml',
+        'wizards/financiera_pago_comercio_wizard.xml',
         'financiera_comercio_report.xml',
     ],
     # only loaded in demonstration mode
