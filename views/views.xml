@@ -286,6 +286,10 @@
     <menuitem name="Cuotas" id="menu_cuotas" web_icon="financiera_comercio,static/description/cuotas.png" groups="financiera_comercio.manager" action="financiera_prestamos.financiera_prestamo_cuota_action" sequence="20"/>
     <!-- CONTACTOS FILTRADOS -->
 
+    <record id="mail.menu_contacts" model="ir.ui.menu">
+      <field name="groups_id" eval="[(3, ref('financiera_comercio.user')), (3, ref('base.group_user')), (3, ref('base.group_partner_manager'))]"/>
+    </record>
+
 <!--     <record id="comercio_contacts_action" model="ir.actions.server">
       <field name="name">Contactos</field>
       <field name="model_id" ref="model_res_partner"/>
