@@ -115,6 +115,7 @@ class ExtendsFinancieraPrestamo(models.Model):
 			rec.update({
 				'sucursal_id': entidad_id.sucursal_id.id,
 				'comercio_id': entidad_id.id,
+				'gestion_default_journal_id': entidad_id.journal_ajuste_invoice_id.id,
 			})
 		return rec
 
