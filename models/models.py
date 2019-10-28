@@ -221,29 +221,29 @@ class ExtendsFinancieraPrestamo(models.Model):
 			('es_refinanciacion', '=', self.es_refinanciacion),
 			('company_id', '=', self.company_id.id)])
 		self.delete_planes()
+		seguros_obj = self.pool.get('financiera.prestamo.seguro')
+		seguros_ids = seguros_obj.search(cr, uid, [
+			('state', '=', 'confirmado'),
+			('company_id', '=', self.company_id.id)])
+		# Agregamos None al listado para los planes que
+		# no requieren seguro!
+		seguros_ids.append(False)
 		for _id in planes_ids:
 			plan_id = self.env['financiera.prestamo.plan'].browse(_id)
 			if len(plan_id.prestamo_tipo_ids) == 0 or self.prestamo_tipo_id in plan_id.prestamo_tipo_ids:
 				if len(plan_id.sucursal_ids) == 0 or self.sucursal_id in plan_id.sucursal_ids or self.comercio_id in plan_id.sucursal_ids:
 					if len(plan_id.partner_tipo_ids) == 0 or self.partner_id.partner_tipo_id in plan_id.partner_tipo_ids:
 						if (plan_id.recibo_de_sueldo == True and self.partner_id.recibo_de_sueldo == True) or (plan_id.recibo_de_sueldo == False):
-							seguros_obj = self.pool.get('financiera.prestamo.seguro')
-							seguros_ids = seguros_obj.search(cr, uid, [
-								('state', '=', 'confirmado'),
-								('company_id', '=', self.company_id.id)])
-							# Agregamos None al listado para los planes que
-							# no requieren seguro!
-							if not plan_id.seguro_calcular:
-								seguros_ids.append(False)
 							for seguro_id in seguros_ids:
-								fpep_values = {
-										'prestamo_id': self.id,
-										'plan_id': plan_id.id,
-										'seguro_id': seguro_id,
-								}
-								fpep_id = self.env['financiera.prestamo.evaluacion.plan'].create(fpep_values)
-								fpep_id.set_fecha_primer_vencimiento()
-								self.plan_ids = [fpep_id.id]
+								if (plan_id.seguro_calcular and seguro_id != False) or (not plan_id.seguro_calcular and seguro_id == False):
+									fpep_values = {
+											'prestamo_id': self.id,
+											'plan_id': plan_id.id,
+											'seguro_id': seguro_id,
+									}
+									fpep_id = self.env['financiera.prestamo.evaluacion.plan'].create(fpep_values)
+									fpep_id.set_fecha_primer_vencimiento()
+									self.plan_ids = [fpep_id.id]
 
 	@api.one
 	def calcular_cuotas_plan(self):
