@@ -215,6 +215,7 @@ class ExtendsFinancieraPrestamo(models.Model):
 		cr = self.env.cr
 		uid = self.env.uid
 		# self.actualizar_cupo()
+		self.capacidad_pago_mensual_disponible = self.partner_id.capacidad_pago_mensual_disponible
 		planes_obj = self.pool.get('financiera.prestamo.plan')
 		planes_ids = planes_obj.search(cr, uid, [
 			('state', '=', 'confirmado'),
