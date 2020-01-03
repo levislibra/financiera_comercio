@@ -314,6 +314,7 @@ class ExtendsFinancieraPrestamoCuota(models.Model):
 	# 	}
 
 	def reporte_graph_comercio_cuotas(self, cr, uid, ids, context=None):
+		uid = 1
 		cuotas_obj = self.pool.get('financiera.prestamo.cuota')
 		ids = cuotas_obj.search(cr, uid, [])
 		for _id in ids:
