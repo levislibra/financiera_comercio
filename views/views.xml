@@ -164,7 +164,7 @@
       <field name="inherit_id" ref="financiera_prestamos.financiera_prestamo_form"/>
       <field name="arch" type="xml">        
         <xpath expr="//field[@name='sucursal_id']" position="after">
-          <field name="comercio_id" domain="[('type', '=', 'comercio')]" attrs="{'readonly': [('state', 'not in', ('solicitado', 'revision', 'autorizado'))]}"/>
+          <field name="comercio_id" domain="[('type', '=', 'comercio')]" attrs="{'readonly': [('state', '!=', 'solicitado')]}"/>
           <field name="comercio_asignado" invisible="1"/>
           <field name="pago_a_comercio" attrs="{'invisible': [('comercio_asignado', '=', False)], 'readonly': [('state', 'not in', ('solicitado', 'revision', 'autorizado'))]}"/>
           <field name="pago_a_comercio_fecha" attrs="{'invisible': [('pago_a_comercio', '=', False)], 'readonly': [('state', 'not in', ('solicitado', 'revision', 'autorizado'))]}"/>
