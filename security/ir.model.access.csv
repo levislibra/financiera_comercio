@@ -1,5 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-user_financiera_prestamo,financiera.prestamo,model_financiera_prestamo,financiera_comercio.user,1,1,1,0
+user_financiera_prestamo,financiera.prestamo,financiera_prestamos.model_financiera_prestamo,financiera_comercio.user,1,1,1,0
 
 user_financiera_prestamo_cuota,financiera.prestamo.cuota,financiera_prestamos.model_financiera_prestamo_cuota,financiera_comercio.user,1,1,1,1
 
@@ -50,3 +50,5 @@ user_product_template,product.template,product.model_product_template,financiera
 user_product_price_history,product.price.history,product.model_product_price_history,financiera_comercio.user,1,1,1,1
 
 user_financiera_pago_comercio,financiera.pago.comercio,model_financiera_pago_comercio,financiera_prestamos.user,1,1,1,0
+
+user_financiera_prestamo_seguro,financiera.prestamo.seguro,financiera_prestamos.model_financiera_prestamo_seguro,financiera_comercio.user,1,0,0,0
