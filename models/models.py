@@ -182,69 +182,43 @@ class ExtendsFinancieraPrestamo(models.Model):
 		self.process_time_finish = datetime.now()
 
 
-	# def iniciativas_de_comercio(self, cr, uid, ids, context=None):
-	# 	current_user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
-	# 	domain = []
-	# 	entidad_id = current_user.entidad_login_id
-	# 	ids = []
-	# 	if entidad_id.type == 'comercio':
-	# 		ids = self.pool.get('financiera.prestamo').search(cr, uid, [('comercio_id', '=', entidad_id.id)])
-	# 	else:
-	# 		ids = self.pool.get('financiera.prestamo').search(cr, uid, [])
-	# 	IrModelData = self.pool['ir.model.data']
-	# 	tree_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'financiera_prestamos.financiera_prestamo_tree')
-	# 	form_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'financiera_prestamos.financiera_prestamo_form')
-	# 	return {
-	# 		'domain': "[('id', 'in', ["+','.join(map(str, ids))+"])]",
-	# 		'name': ('Solicitudes'),
-	# 		'view_mode': 'tree,form',
-	# 		'res_model': 'financiera.prestamo',
-	# 		'views': [
- #                [tree_view_id, 'tree'],
- #                [form_view_id, 'form'],
- #            ],
-	# 		'type': 'ir.actions.act_window',
-	# 		'target': 'current',
-	# 	}
-
-
 	# Esta funcion es reemplazada en caso de que este instalado
 	# el modulo financiera_comercio
-	@api.one
-	def asignar_planes_disponibles(self):
-		cr = self.env.cr
-		uid = self.env.uid
-		# self.actualizar_cupo()
-		self.capacidad_pago_mensual_disponible = self.partner_id.capacidad_pago_mensual_disponible
-		planes_obj = self.pool.get('financiera.prestamo.plan')
-		planes_ids = planes_obj.search(cr, uid, [
-			('state', '=', 'confirmado'),
-			('es_refinanciacion', '=', self.es_refinanciacion),
-			('company_id', '=', self.company_id.id)])
-		self.delete_planes()
-		seguros_obj = self.pool.get('financiera.prestamo.seguro')
-		seguros_ids = seguros_obj.search(cr, uid, [
-			('state', '=', 'confirmado'),
-			('company_id', '=', self.company_id.id)])
-		# Agregamos None al listado para los planes que
-		# no requieren seguro!
-		seguros_ids.append(False)
-		for _id in planes_ids:
-			plan_id = self.env['financiera.prestamo.plan'].browse(_id)
-			if len(plan_id.prestamo_tipo_ids) == 0 or self.prestamo_tipo_id in plan_id.prestamo_tipo_ids:
-				if len(plan_id.sucursal_ids) == 0 or self.sucursal_id in plan_id.sucursal_ids or self.comercio_id in plan_id.sucursal_ids:
-					if len(plan_id.partner_tipo_ids) == 0 or self.partner_id.partner_tipo_id in plan_id.partner_tipo_ids:
-						if (plan_id.recibo_de_sueldo == True and self.partner_id.recibo_de_sueldo == True) or (plan_id.recibo_de_sueldo == False):
-							for seguro_id in seguros_ids:
-								if (plan_id.seguro_calcular and seguro_id != False) or (not plan_id.seguro_calcular and seguro_id == False):
-									fpep_values = {
-											'prestamo_id': self.id,
-											'plan_id': plan_id.id,
-											'seguro_id': seguro_id,
-									}
-									fpep_id = self.env['financiera.prestamo.evaluacion.plan'].create(fpep_values)
-									fpep_id.set_fecha_primer_vencimiento()
-									self.plan_ids = [fpep_id.id]
+	# @api.one
+	# def asignar_planes_disponibles(self):
+	# 	cr = self.env.cr
+	# 	uid = self.env.uid
+	# 	# self.actualizar_cupo()
+	# 	self.capacidad_pago_mensual_disponible = self.partner_id.capacidad_pago_mensual_disponible
+	# 	planes_obj = self.pool.get('financiera.prestamo.plan')
+	# 	planes_ids = planes_obj.search(cr, uid, [
+	# 		('state', '=', 'confirmado'),
+	# 		('es_refinanciacion', '=', self.es_refinanciacion),
+	# 		('company_id', '=', self.company_id.id)])
+	# 	self.delete_planes()
+	# 	seguros_obj = self.pool.get('financiera.prestamo.seguro')
+	# 	seguros_ids = seguros_obj.search(cr, uid, [
+	# 		('state', '=', 'confirmado'),
+	# 		('company_id', '=', self.company_id.id)])
+	# 	# Agregamos None al listado para los planes que
+	# 	# no requieren seguro!
+	# 	seguros_ids.append(False)
+	# 	for _id in planes_ids:
+	# 		plan_id = self.env['financiera.prestamo.plan'].browse(_id)
+	# 		if len(plan_id.prestamo_tipo_ids) == 0 or self.prestamo_tipo_id in plan_id.prestamo_tipo_ids:
+	# 			if len(plan_id.sucursal_ids) == 0 or self.sucursal_id in plan_id.sucursal_ids or self.comercio_id in plan_id.sucursal_ids:
+	# 				if len(plan_id.partner_tipo_ids) == 0 or self.partner_id.partner_tipo_id in plan_id.partner_tipo_ids:
+	# 					if (plan_id.recibo_de_sueldo == True and self.partner_id.recibo_de_sueldo == True) or (plan_id.recibo_de_sueldo == False):
+	# 						for seguro_id in seguros_ids:
+	# 							if (plan_id.seguro_calcular and seguro_id != False) or (not plan_id.seguro_calcular and seguro_id == False):
+	# 								fpep_values = {
+	# 										'prestamo_id': self.id,
+	# 										'plan_id': plan_id.id,
+	# 										'seguro_id': seguro_id,
+	# 								}
+	# 								fpep_id = self.env['financiera.prestamo.evaluacion.plan'].create(fpep_values)
+	# 								fpep_id.set_fecha_primer_vencimiento()
+	# 								self.plan_ids = [fpep_id.id]
 
 	@api.one
 	def calcular_cuotas_plan(self):
@@ -286,32 +260,6 @@ class ExtendsFinancieraPrestamoCuota(models.Model):
 		})
 		return rec
 
-
-	# def cuotas_de_comercio(self, cr, uid, ids, context=None):
-	# 	current_user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
-	# 	domain = []
-	# 	entidad_id = current_user.entidad_login_id
-	# 	ids = []
-	# 	if entidad_id.type == 'comercio':
-	# 		ids = self.pool.get('financiera.prestamo.cuota').search(cr, uid, [('comercio_id', '=', entidad_id.id)])
-	# 	else:
-	# 		ids = self.pool.get('financiera.prestamo.cuota').search(cr, uid, [])
-	# 	IrModelData = self.pool['ir.model.data']
-	# 	tree_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'financiera_prestamos.financiera_prestamo_cuota_tree')
-	# 	form_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'financiera_prestamos.financiera_prestamo_cuota_form')
-	# 	return {
-	# 		'domain': "[('id', 'in', ["+','.join(map(str, ids))+"])]",
-	# 		'name': ('Cuotas del Comercio'),
-	# 		'view_mode': 'tree,form',
-	# 		'res_model': 'financiera.prestamo.cuota',
-	# 		'views': [
- #                [tree_view_id, 'tree'],
- #                [form_view_id, 'form'],
- #            ],
-	# 		'type': 'ir.actions.act_window',
-	# 		'target': 'current',
-	# 		'context': {'search_default_activa':1},
-	# 	}
 
 	def reporte_graph_comercio_cuotas(self, cr, uid, ids, context=None):
 		uid = 1
@@ -371,30 +319,3 @@ class ExtendsResPartner(models.Model):
 		uid = self.env.uid
 		current_user = self.pool.get('res.users').browse(cr, uid, uid, context=None)
 		self.is_user_login_comercio = current_user.entidad_login_id.type == 'comercio'
-
-	# def comercio_contacts_action(self, cr, uid, ids, context=None):
-	# 	current_user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
-	# 	domain = []
-	# 	entidad_id = current_user.entidad_login_id
-	# 	ids = []
-	# 	if entidad_id.type == 'comercio':
-	# 		ids = self.pool.get('res.partner').search(cr, uid, [('comercio_id', '=', entidad_id.id)])
-	# 	else:
-	# 		ids = self.pool.get('res.partner').search(cr, uid, [])
-	# 	IrModelData = self.pool['ir.model.data']
-	# 	kanban_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'base.res_partner_kanban_view')
-	# 	tree_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'base.view_partner_tree')
-	# 	form_view_id = IrModelData.xmlid_to_res_id(cr, uid, 'base.view_partner_form')
-	# 	return {
-	# 		'domain': "[('id', 'in', ["+','.join(map(str, ids))+"])]",
-	# 		'name': ('Contactos'),
-	# 		'view_mode': 'kanban,tree,form',
-	# 		'res_model': 'res.partner',
-	# 		'views': [
- #                [kanban_view_id, 'kanban'],
- #                [tree_view_id, 'tree'],
- #                [form_view_id, 'form'],
- #            ],
-	# 		'type': 'ir.actions.act_window',
-	# 		'target': 'current',
-	# 	}
