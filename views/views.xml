@@ -214,7 +214,7 @@
         (0, 0, {'view_mode': 'graph', 'view_id': ref('financiera_prestamo_comercio_graph')})]"/>
     </record>
 
-    <menuitem name="Grafico segun comercio" id="menu_prestamos_graph_comercio_action" sequence="100" parent="financiera_prestamos.menu_prestamos_reportes" action="financiera_prestamo_comercio_graph_action"/>
+    <!-- <menuitem name="Grafico segun comercio" id="menu_prestamos_graph_comercio_action" sequence="100" parent="financiera_prestamos.menu_prestamos_reportes" action="financiera_prestamo_comercio_graph_action"/> -->
 
     <!-- Graph views Cuotas segun comercio -->
 
@@ -235,7 +235,7 @@
       <field name="code">action = self.reporte_graph_comercio_cuotas(cr, uid, context.get('active_ids', []), context=context)</field>
     </record>
 
-    <menuitem name="Grafico segun comercio" id="menu_cuotas_graph_comercio_action" sequence="120" parent="financiera_prestamos.menu_cuotas_reportes" action="financiera_prestamo_cuota_comercio_graph_action"/>
+    <!-- <menuitem name="Grafico segun comercio" id="menu_cuotas_graph_comercio_action" sequence="120" parent="financiera_prestamos.menu_cuotas_reportes" action="financiera_prestamo_cuota_comercio_graph_action"/> -->
 
     <!-- Extends Cuota -->
 
