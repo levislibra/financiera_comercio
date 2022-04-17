@@ -2,22 +2,6 @@
 <openerp>
     <!-- <data noupdate="1"> -->
 
-        <record id="prestamo_comercio_comp_rule" model="ir.rule">
-            <field name="name">Prestamo Comercio multi-company</field>
-            <field name="model_id" ref="financiera_prestamos.model_financiera_prestamo"/>
-            <field name="groups" eval="[(4, ref('financiera_comercio.user'))]"/>
-            <field name="domain_force">
-            [('comercio_id','=', user.entidad_login_id.id)]</field>
-        </record>
-
-
-        <record id="prestamo_cuota_comercio_comp_rule" model="ir.rule">
-            <field name="name">Prestamo Cuota Comercio multi-company</field>
-            <field name="model_id" ref="financiera_prestamos.model_financiera_prestamo_cuota"/>
-            <field name="groups" eval="[(4, ref('financiera_comercio.user'))]"/>
-            <field name="domain_force">
-            [('comercio_id','=', user.entidad_login_id.id)]</field>
-        </record>
-
-    <!-- </data> '|', ('comercio_id', '=', False),  -->
+       
+    <!-- </data> -->
 </openerp>

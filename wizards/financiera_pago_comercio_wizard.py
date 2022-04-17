@@ -14,20 +14,20 @@ class FinancieraPagoComercioWizard(models.TransientModel):
 		active_ids = context.get('active_ids')
 
 		monto = 0
-		comercio_id = None
+		sucursal_id = None
 		comercio_old_id = None
 		if len(active_ids) > 0:
 			for _id in active_ids:
 				prestamo_id = self.env['financiera.prestamo'].browse(_id)
-				comercio_id = prestamo_id.comercio_id.id
-				if comercio_old_id != None and comercio_old_id != comercio_id:
+				sucursal_id = prestamo_id.sucursal_id.id
+				if comercio_old_id != None and comercio_old_id != sucursal_id:
 					raise ValidationError("Todos los prestamos deben ser del mismo comercio.")
-				comercio_old_id = comercio_id
+				comercio_old_id = sucursal_id
 				monto += prestamo_id.saldo_a_pagar
 
 			fpc_values = {
 				'fecha': datetime.now(),
-				'comercio_id': comercio_id,
+				'sucursal_id': sucursal_id,
 				'prestamo_ids': [(6,0,active_ids)],
 				'monto': monto,
 			}

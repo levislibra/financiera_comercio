@@ -21,7 +21,7 @@ class FinancieraPagoComercio(models.Model):
 
 	name = fields.Char('Nombre')
 	fecha = fields.Date('Fecha de pago')
-	comercio_id = fields.Many2one('financiera.entidad', 'Comercio', domain="[('type', '=', 'comercio')]")
+	sucursal_id = fields.Many2one('financiera.entidad', 'Comercio', domain="[('type', '=', 'comercio')]")
 	prestamo_ids = fields.One2many('financiera.prestamo', 'pago_comercio_id', 'Prestamos')
 	pago_ids = fields.One2many('account.payment', 'pago_comercio_id', 'Pagos')
 	monto = fields.Float('Monto total', digits=(16,2))
@@ -40,7 +40,7 @@ class FinancieraPagoComercio(models.Model):
 		pago_comercio_ids = self.pool.get('financiera.pago.comercio').search(cr, uid, [('company_id', '=', rec.company_id.id)])
 		_id = len(pago_comercio_ids)
 		rec.update({
-			'name': 'PAGO/'+str(rec.comercio_id.id).zfill(4)+'/'+str(_id).zfill(8)
+			'name': 'PAGO/'+str(rec.sucursal_id.id).zfill(4)+'/'+str(_id).zfill(8)
 		})
 		return rec
 
@@ -91,9 +91,6 @@ class ExtendsFinancieraPrestamo(models.Model):
 	_inherit = 'financiera.prestamo'
 	_name = 'financiera.prestamo'
 
-	comercio_id = fields.Many2one('financiera.entidad', 'Comercio')
-	comercio_asignado = fields.Boolean('Comercio esta asignado?', compute='_compute_comercio_asignado')
-	asigned_id = fields.Many2one('res.users', 'Asignado a')
 	pago_a_comercio = fields.Boolean('Pago a comercio')
 	pago_a_comercio_fecha = fields.Date('Fecha de pago pactada')
 	pago_comercio_id = fields.Many2one('financiera.pago.comercio', 'Contenedor de Pago a comercio')
@@ -113,17 +110,9 @@ class ExtendsFinancieraPrestamo(models.Model):
 		entidad_id = current_user.entidad_login_id
 		if entidad_id.type == 'comercio':
 			rec.update({
-				'sucursal_id': entidad_id.sucursal_id.id,
-				'comercio_id': entidad_id.id,
 				'gestion_default_journal_id': entidad_id.journal_ajuste_invoice_id.id,
 			})
 		return rec
-
-	@api.one
-	def _compute_comercio_asignado(self):
-		self.comercio_asignado = False
-		if len(self.comercio_id) > 0:
-			self.comercio_asignado = True
 
 	@api.one
 	def _compute_send_minutes(self):
@@ -181,110 +170,14 @@ class ExtendsFinancieraPrestamo(models.Model):
 	def cancel(self):
 		self.process_time_finish = datetime.now()
 
-
-	# Esta funcion es reemplazada en caso de que este instalado
-	# el modulo financiera_comercio
-	# @api.one
-	# def asignar_planes_disponibles(self):
-	# 	cr = self.env.cr
-	# 	uid = self.env.uid
-	# 	# self.actualizar_cupo()
-	# 	self.capacidad_pago_mensual_disponible = self.partner_id.capacidad_pago_mensual_disponible
-	# 	planes_obj = self.pool.get('financiera.prestamo.plan')
-	# 	planes_ids = planes_obj.search(cr, uid, [
-	# 		('state', '=', 'confirmado'),
-	# 		('es_refinanciacion', '=', self.es_refinanciacion),
-	# 		('company_id', '=', self.company_id.id)])
-	# 	self.delete_planes()
-	# 	seguros_obj = self.pool.get('financiera.prestamo.seguro')
-	# 	seguros_ids = seguros_obj.search(cr, uid, [
-	# 		('state', '=', 'confirmado'),
-	# 		('company_id', '=', self.company_id.id)])
-	# 	# Agregamos None al listado para los planes que
-	# 	# no requieren seguro!
-	# 	seguros_ids.append(False)
-	# 	for _id in planes_ids:
-	# 		plan_id = self.env['financiera.prestamo.plan'].browse(_id)
-	# 		if len(plan_id.prestamo_tipo_ids) == 0 or self.prestamo_tipo_id in plan_id.prestamo_tipo_ids:
-	# 			if len(plan_id.sucursal_ids) == 0 or self.sucursal_id in plan_id.sucursal_ids or self.comercio_id in plan_id.sucursal_ids:
-	# 				if len(plan_id.partner_tipo_ids) == 0 or self.partner_id.partner_tipo_id in plan_id.partner_tipo_ids:
-	# 					if (plan_id.recibo_de_sueldo == True and self.partner_id.recibo_de_sueldo == True) or (plan_id.recibo_de_sueldo == False):
-	# 						for seguro_id in seguros_ids:
-	# 							if (plan_id.seguro_calcular and seguro_id != False) or (not plan_id.seguro_calcular and seguro_id == False):
-	# 								fpep_values = {
-	# 										'prestamo_id': self.id,
-	# 										'plan_id': plan_id.id,
-	# 										'seguro_id': seguro_id,
-	# 								}
-	# 								fpep_id = self.env['financiera.prestamo.evaluacion.plan'].create(fpep_values)
-	# 								fpep_id.set_fecha_primer_vencimiento()
-	# 								self.plan_ids = [fpep_id.id]
-
 	@api.one
 	def calcular_cuotas_plan(self):
 		rec = super(ExtendsFinancieraPrestamo, self).calcular_cuotas_plan()
 		self.pago_a_comercio = self.plan_id.pago_a_comercio
-		if self.plan_id.pago_a_comercio and len(self.comercio_id) > 0:
+		if self.plan_id.pago_a_comercio:
 			self.pago_a_comercio_fecha = datetime.strptime(self.fecha, "%Y-%m-%d") + timedelta(days=self.plan_id.pago_a_comercio_dias)
 		else:
 			self.pago_a_comercio_fecha = False
-
-
-class ExtendsFinancieraPrestamoCuota(models.Model):
-	_inherit = 'financiera.prestamo.cuota'
-	_name = 'financiera.prestamo.cuota'
-
-	comercio_id = fields.Many2one('financiera.entidad', 'Comercio')
-
-	@api.model
-	def _actualizar_comercio_cuotas(self):
-		cr = self.env.cr
-		uid = self.env.uid
-		cuotas_obj = self.pool.get('financiera.prestamo.cuota')
-		cuotas_ids = cuotas_obj.search(cr, uid, [
-				('comercio_id', '=', None)
-			])
-		_logger.info('Init Actualizar comercio en cuotas')
-		count = 0
-		for _id in cuotas_ids:
-			cuota_id = cuotas_obj.browse(cr, uid, _id)
-			cuota_id.comercio_id = cuota_id.prestamo_id.comercio_id.id
-			count += 1
-		_logger.info('Finish Actualizar comercio de cuotas: %s cuotas actualizadas', count)
-
-	@api.model
-	def create(self, values):
-		rec = super(ExtendsFinancieraPrestamoCuota, self).create(values)
-		rec.update({
-			'comercio_id': rec.prestamo_id.comercio_id.id,
-		})
-		return rec
-
-
-	def reporte_graph_comercio_cuotas(self, cr, uid, ids, context=None):
-		uid = 1
-		cuotas_obj = self.pool.get('financiera.prestamo.cuota')
-		ids = cuotas_obj.search(cr, uid, [])
-		for _id in ids:
-			cuota_id = cuotas_obj.browse(cr, uid, _id)
-			cuota_id.saldo_store = cuota_id.saldo
-			cuota_id.cobrado_store = cuota_id.cobrado
-			cuota_id.punitorio_store = cuota_id.punitorio
-			cuota_id.total_store = cuota_id.total
-		model_obj = self.pool.get('ir.model.data')
-		data_id = model_obj._get_id(cr, uid, 'financiera_comercio', 'financiera_prestamo_cuota_comercio_graph')
-		view_id = model_obj.browse(cr, uid, data_id, context=None).res_id
-		
-		return {
-			'domain': "[('id', 'in', ["+','.join(map(str, ids))+"])]",
-			'name': ('Grafico de cuotas segun comercio'),
-			'view_mode': 'graph',
-			'res_model': 'financiera.prestamo.cuota',
-			'view_id': view_id,
-			'type': 'ir.actions.act_window',
-			'target': 'current',
-			# 'context': {'search_default_a_facturar_mayor':1},
-		}
 
 class ExtendsFinancieraPrestamoPlan(models.Model):
 	_inherit = 'financiera.prestamo.plan'
@@ -294,28 +187,8 @@ class ExtendsFinancieraPrestamoPlan(models.Model):
 	pago_a_comercio = fields.Boolean('Pago a comercio')
 	pago_a_comercio_dias = fields.Integer('Dias para la fecha de pago')
 
-class ExtendsResPartner(models.Model):
-	_name = 'res.partner'
-	_inherit = 'res.partner'
+class ExtendsFinancieraPrestamoCuota(models.Model):
+	_name = 'financiera.prestamo.cuota'
+	_inherit = 'financiera.prestamo.cuota'
 
-	comercio_id = fields.Many2one('financiera.entidad', "Comercio")
-	is_user_login_comercio = fields.Boolean('Usuario actual esta logueado en comercio', compute='_compute_is_user_login_comercio')
-	
-	@api.model
-	def create(self, values):
-		rec = super(ExtendsResPartner, self).create(values)
-		context = dict(self._context or {})
-		current_uid = context.get('uid')
-		current_user = self.env['res.users'].browse(current_uid)
-		comercio_id = current_user.entidad_login_id.id or False
-		rec.update({
-			'comercio_id': comercio_id,
-		})
-		return rec
-
-	@api.one
-	def _compute_is_user_login_comercio(self):
-		cr = self.env.cr
-		uid = self.env.uid
-		current_user = self.pool.get('res.users').browse(cr, uid, uid, context=None)
-		self.is_user_login_comercio = current_user.entidad_login_id.type == 'comercio'
+	comercio_id = fields.Many2one('financiera.entidad', 'Comercio')
