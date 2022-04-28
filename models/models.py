@@ -172,13 +172,10 @@ class ExtendsFinancieraPrestamo(models.Model):
 
 	@api.one
 	def calcular_cuotas_plan(self):
-		rec = super(ExtendsFinancieraPrestamo, self).calcular_cuotas_plan()
-		self.pago_a_comercio = self.plan_id.pago_a_comercio
+		super(ExtendsFinancieraPrestamo, self).calcular_cuotas_plan()
 		if self.plan_id.pago_a_comercio:
+			self.pago_a_comercio = True
 			self.pago_a_comercio_fecha = datetime.strptime(self.fecha, "%Y-%m-%d") + timedelta(days=self.plan_id.pago_a_comercio_dias)
-		else:
-			self.pago_a_comercio_fecha = False
-
 class ExtendsFinancieraPrestamoPlan(models.Model):
 	_inherit = 'financiera.prestamo.plan'
 	_name = 'financiera.prestamo.plan'
