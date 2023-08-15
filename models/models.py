@@ -171,8 +171,8 @@ class ExtendsFinancieraPrestamo(models.Model):
 		self.process_time_finish = datetime.now()
 
 	@api.one
-	def calcular_cuotas_plan(self):
-		super(ExtendsFinancieraPrestamo, self).calcular_cuotas_plan()
+	def calcular_cuotas_plan(self, cuotas=None, monto=None):
+		super(ExtendsFinancieraPrestamo, self).calcular_cuotas_plan(cuotas, monto)
 		if self.plan_id.pago_a_comercio:
 			self.pago_a_comercio = True
 			self.pago_a_comercio_fecha = datetime.strptime(self.fecha, "%Y-%m-%d") + timedelta(days=self.plan_id.pago_a_comercio_dias)
